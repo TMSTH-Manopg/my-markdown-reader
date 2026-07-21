@@ -25,7 +25,7 @@ async function loadMarkdown(filePath) {
 
     contentElement.innerHTML = cleanHtml;
 
-    convertMermaidCodeBlocks(contentElement);
+    convertMermaidBlocks(contentElement);
 
     await mermaid.run({
       nodes: contentElement.querySelectorAll(".mermaid")
@@ -40,19 +40,17 @@ async function loadMarkdown(filePath) {
   }
 }
 
-function convertMermaidCodeBlocks(container) {
-  const mermaidBlocks = container.querySelectorAll(
+function convertMermaidBlocks(container) {
+  const blocks = container.querySelectorAll(
     "pre code.language-mermaid, pre code.lang-mermaid"
   );
 
-  mermaidBlocks.forEach((block) => {
-    const pre = block.parentElement;
-
+  blocks.forEach((block) => {
     const mermaidDiv = document.createElement("div");
     mermaidDiv.className = "mermaid";
     mermaidDiv.textContent = block.textContent;
 
-    pre.replaceWith(mermaidDiv);
+    block.parentElement.replaceWith(mermaidDiv);
   });
 }
 
