@@ -1,4 +1,4 @@
-# mnpg-Document
+# TMSTH Prem-Document
 
 Repository นี้ใช้สำหรับจัดเก็บเอกสาร Markdown ของระบบงานต่าง ๆ และแสดงผลผ่าน GitHub Pages
 
