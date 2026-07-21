@@ -1,3 +1,11 @@
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+mermaid.initialize({
+  startOnLoad: false,
+  theme: "default",
+  securityLevel: "loose"
+});
+
 async function loadMarkdown(filePath) {
   const contentElement = document.getElementById("markdown-content");
 
@@ -16,6 +24,13 @@ async function loadMarkdown(filePath) {
     const cleanHtml = DOMPurify.sanitize(rawHtml);
 
     contentElement.innerHTML = cleanHtml;
+
+    convertMermaidCodeBlocks(contentElement);
+
+    await mermaid.run({
+      nodes: contentElement.querySelectorAll(".mermaid")
+    });
+
   } catch (error) {
     contentElement.innerHTML = `
       <h2>เกิดข้อผิดพลาด</h2>
@@ -25,4 +40,23 @@ async function loadMarkdown(filePath) {
   }
 }
 
+function convertMermaidCodeBlocks(container) {
+  const mermaidBlocks = container.querySelectorAll(
+    "pre code.language-mermaid, pre code.lang-mermaid"
+  );
+
+  mermaidBlocks.forEach((block) => {
+    const pre = block.parentElement;
+
+    const mermaidDiv = document.createElement("div");
+    mermaidDiv.className = "mermaid";
+    mermaidDiv.textContent = block.textContent;
+
+    pre.replaceWith(mermaidDiv);
+  });
+}
+
+window.loadMarkdown = loadMarkdown;
+
 loadMarkdown("docs/index.md");
+``
